@@ -1,36 +1,114 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Mission Control v2 🚀
 
-## Getting Started
+Kanban-style task management system for AI agent coordination.
 
-First, run the development server:
+## Overview
+
+Mission Control v2 is an internal tool for managing tasks, projects, and AI agent assignments. Features drag-and-drop task management with real-time status updates.
+
+## Stack
+
+- **Framework:** Next.js 16 + React 19
+- **Database:** PostgreSQL (Railway)
+- **ORM:** Prisma 7
+- **Styling:** Tailwind CSS
+- **Drag & Drop:** @hello-pangea/dnd
+- **Icons:** Lucide React
+- **Hosting:** Railway
+
+## Features
+
+- ✅ Kanban board with drag-and-drop
+- ✅ Task status management (todo → in_progress → done)
+- ✅ Priority levels (low, medium, high, urgent)
+- ✅ Project organization
+- ✅ Agent assignment tracking
+- ✅ Real-time task updates
+
+## Data Model
+
+```
+Agent (AI agents like Pixel, Stack, Shield)
+  ├── id, name, emoji, role, color, active
+  └── tasks[] (assigned tasks)
+
+Project (Grouped work like UrbanPass, ClawStack)
+  ├── id, name, description, color, archived
+  └── tasks[] (project tasks)
+
+Task
+  ├── id, title, description
+  ├── status (todo, in_progress, done)
+  ├── priority (low, medium, high, urgent)
+  ├── projectId → Project
+  ├── agentId → Agent
+  └── dueDate
+```
+
+## Setup
+
+### 1. Install dependencies
+
+```bash
+npm install
+```
+
+### 2. Configure environment
+
+```bash
+cp .env.example .env.local
+```
+
+```env
+DATABASE_URL=postgresql://...
+```
+
+### 3. Setup database
+
+```bash
+npx prisma generate
+npx prisma db push
+```
+
+### 4. Run dev server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## API Endpoints
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/tasks` | GET/POST | List/create tasks |
+| `/api/tasks/[id]` | PATCH/DELETE | Update/delete task |
+| `/api/projects` | GET/POST | List/create projects |
+| `/api/agents` | GET | List agents |
+| `/api/stats` | GET | Dashboard statistics |
 
-## Learn More
+## Deploy to Railway
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+# Login and create project
+railway login
+railway init
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# Add PostgreSQL
+railway add --plugin postgresql
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# Set env vars in Railway dashboard
+# Deploy
+railway up
+```
 
-## Deploy on Vercel
+## Related
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Part of the OpenClaw ecosystem
+- Syncs with Agent heartbeat crons
+- Integrates with Notion for external visibility
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## License
+
+MIT
